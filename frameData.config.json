@@ -1,6 +1,11 @@
 {
   "projectDirectory": "",
-  "tagList": [],
+  "tagList": [
+    {
+      "kind": "location",
+      "name": "selfInstall"
+    }
+  ],
   "directoryList": [
     {
       "name": "sampleDirectory1",
@@ -38,6 +43,7 @@
     "exampleGroup1",
     "exampleGroup2",
     "exampleGroup3",
-    "exampleGroup4"
+    "exampleGroup4",
+    "selfGroup"
   ]
 }

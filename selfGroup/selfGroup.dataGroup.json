@@ -1,0 +1,20 @@
+{
+  "fileList": [
+    {
+      "name": "frameData.config.json",
+      "tag": {
+        "kind": "location",
+        "name": "selfInstall"
+      },
+      "writePolicy": "force"
+    },
+    {
+      "name": "install.py",
+      "tag": {
+        "kind": "location",
+        "name": "selfInstall"
+      },
+      "writePolicy": "force"
+    }
+  ]
+}
