@@ -10,7 +10,7 @@
             "kind": "The type of tag associated with the file. This can be used to categorize the file based on its purpose or function.",
             "name": "The name of the tag associated with the file. This should be a unique identifier for the tag."
           },
-          "writePolicy": "The write policy for the file. This can be set to 'force' to allow overwriting existing files, or 'skip' to prevent overwriting existing files."
+          "writePolicy": "The write policy for the file. This can be set to 'force' to allow overwriting existing files, 'copy' to create copy with a .tmp extension or 'skip' to prevent overwriting existing files."
         }
       ]
     }
