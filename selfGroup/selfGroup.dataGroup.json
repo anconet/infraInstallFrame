@@ -1,4 +1,20 @@
 {
+  "__comment": {
+    "__description": "This is a data group configuration file for the selfGroup data group. It contains settings and information about the data group, including the name of the data group and a list of files that are part of the data group.",
+    "fileList": {
+      "__description": "A list of files that are part of the data group. Each file has a name, a tag, and a write policy.",
+      "__array": [
+        {
+          "name": "The name of the file. This should be a unique identifier for the file within the data group.",
+          "tag": {
+            "kind": "The type of tag associated with the file. This can be used to categorize the file based on its purpose or function.",
+            "name": "The name of the tag associated with the file. This should be a unique identifier for the tag."
+          },
+          "writePolicy": "The write policy for the file. This can be set to 'force' to allow overwriting existing files, or 'skip' to prevent overwriting existing files."
+        }
+      ]
+    }
+  },
   "fileList": [
     {
       "name": "frameData.config.json",

@@ -366,3 +366,108 @@ def test_datagroup_config_missing_file_fails(project_dir: Path) -> None:
     result = _run_install(["datagroup", "exampleGroup1"], cwd=project_dir)
 
     assert result.returncode != 0
+
+
+def test_frame_config_with_comment_string_is_ignored(project_dir: Path) -> None:
+    frame_data = json.loads((project_dir / "frameData.config.json").read_text(encoding="utf-8"))
+    frame_data["__comment"] = "This is the main frame configuration file"
+    _write_json(project_dir / "frameData.config.json", frame_data)
+
+    result = _run_install(["frame"], cwd=project_dir)
+
+    assert result.returncode == 0, result.stderr
+    target_root = project_dir.parent
+    assert (target_root / "alpha").is_dir()
+    assert (target_root / "beta").is_dir()
+
+
+def test_frame_config_with_comment_object_is_ignored(project_dir: Path) -> None:
+    frame_data = json.loads((project_dir / "frameData.config.json").read_text(encoding="utf-8"))
+    frame_data["__comment"] = {
+        "__comment": "Configuration documentation",
+        "purpose": "Define the framework structure",
+        "version": "1.0",
+    }
+    _write_json(project_dir / "frameData.config.json", frame_data)
+
+    result = _run_install(["frame"], cwd=project_dir)
+
+    assert result.returncode == 0, result.stderr
+    target_root = project_dir.parent
+    assert (target_root / "alpha").is_dir()
+    assert (target_root / "beta").is_dir()
+
+
+def test_datagroup_config_with_comment_is_ignored(project_dir: Path) -> None:
+    assert _run_install(["frame"], cwd=project_dir).returncode == 0
+
+    group1_config = json.loads(
+        (project_dir / "exampleGroup1" / "exampleGroup1.dataGroup.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    group1_config["__comment"] = "Example group with three files"
+    _write_json(project_dir / "exampleGroup1" / "exampleGroup1.dataGroup.json", group1_config)
+
+    result = _run_install(["datagroup", "exampleGroup1"], cwd=project_dir)
+
+    assert result.returncode == 0, result.stderr
+    target_root = project_dir.parent
+    assert (target_root / "alpha" / "file11.md").read_text(encoding="utf-8") == "group1-a"
+    assert (target_root / "alpha" / "file12.md").read_text(encoding="utf-8") == "group1-b"
+    assert (target_root / "alpha" / "file13.md").read_text(encoding="utf-8") == "group1-c"
+
+
+def test_directory_object_with_comment_is_ignored(project_dir: Path) -> None:
+    frame_data = json.loads((project_dir / "frameData.config.json").read_text(encoding="utf-8"))
+    frame_data["directoryList"][0]["__comment"] = "Alpha directory location"
+    _write_json(project_dir / "frameData.config.json", frame_data)
+
+    result = _run_install(["frame"], cwd=project_dir)
+
+    assert result.returncode == 0, result.stderr
+    target_root = project_dir.parent
+    assert (target_root / "alpha").is_dir()
+    assert (target_root / "beta").is_dir()
+
+
+def test_file_entry_with_comment_is_ignored(project_dir: Path) -> None:
+    assert _run_install(["frame"], cwd=project_dir).returncode == 0
+
+    group1_config = json.loads(
+        (project_dir / "exampleGroup1" / "exampleGroup1.dataGroup.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    group1_config["fileList"][0]["__comment"] = "This is file11.md"
+    _write_json(project_dir / "exampleGroup1" / "exampleGroup1.dataGroup.json", group1_config)
+
+    result = _run_install(["datagroup", "exampleGroup1"], cwd=project_dir)
+
+    assert result.returncode == 0, result.stderr
+    target_root = project_dir.parent
+    assert (target_root / "alpha" / "file11.md").read_text(encoding="utf-8") == "group1-a"
+
+
+def test_comment_with_different_value_types(project_dir: Path) -> None:
+    assert _run_install(["frame"], cwd=project_dir).returncode == 0
+
+    group1_config = json.loads(
+        (project_dir / "exampleGroup1" / "exampleGroup1.dataGroup.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    # Test various __comment value types
+    group1_config["__comment"] = "String comment"
+    group1_config["fileList"][0]["__comment"] = ["Array", "comment"]
+    group1_config["fileList"][1]["__comment"] = 42
+    group1_config["fileList"][2]["__comment"] = True
+    _write_json(project_dir / "exampleGroup1" / "exampleGroup1.dataGroup.json", group1_config)
+
+    result = _run_install(["datagroup", "exampleGroup1"], cwd=project_dir)
+
+    assert result.returncode == 0, result.stderr
+    target_root = project_dir.parent
+    assert (target_root / "alpha" / "file11.md").read_text(encoding="utf-8") == "group1-a"
+    assert (target_root / "alpha" / "file12.md").read_text(encoding="utf-8") == "group1-b"
+    assert (target_root / "alpha" / "file13.md").read_text(encoding="utf-8") == "group1-c"

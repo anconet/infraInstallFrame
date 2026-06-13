@@ -138,6 +138,7 @@ exampleGroup4/exampleGroup4.dataGroup.json
     - There must be at least 1 `/<dataGroup>` directory and associated `<dataGroup>.dataGroup.json file.
     - The file must contain valid JSON. 
     - The JSON must not be malformed.
+    - This file follows the [commentsInJson.spec.md](commentsInJson.spec.md) specification. The `__comment` key is reserved at all object nesting levels and must be ignored for business logic and configuration behavior.
     - The config must contain all required top-level keys: fileList.
     - If a requested `<dataGroup>` directory does not exist, report the missing directory in the error message.
     - If `/<dataGroup>/<dataGroup>.dataGroup.json` does not exist for a discovered or requested dataGroup, report the missing config file in the error message.
@@ -281,6 +282,7 @@ class DataGroup(TypedDict):
     - If the file does not exist, the script must exit with non-zero status and print a clear error message indicating the file path that was not found.
 - The file must contain valid JSON. 
     - If the JSON is malformed, the script must exit with non-zero status and print a clear error message describing the JSON parse error.
+    - This file follows the [commentsInJson.spec.md](commentsInJson.spec.md) specification. The `__comment` key is reserved at all object nesting levels and must be ignored for business logic and configuration behavior.
 - The config must contain all required top-level keys: projectDirectory, tagList, directoryList, and dataGroupList.
     - If any of these keys are missing, the script must exit with non-zero status and warn the user.
 - If any value has an incorrect type, the script must exit with non-zero status and warn the user.
