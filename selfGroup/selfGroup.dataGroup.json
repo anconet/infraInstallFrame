@@ -22,7 +22,7 @@
         "kind": "location",
         "name": "selfInstall"
       },
-      "writePolicy": "force"
+      "writePolicy": "copy"
     },
     {
       "name": "install.py",
